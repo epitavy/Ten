@@ -5,11 +5,12 @@ public class Window extends JFrame{
 	
 	public Window(){
 	    this.setTitle("Ten");
-	    this.setSize(500, 500);
+	    this.setSize(700, 700);
 	    this.setLocationRelativeTo(null);
-	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
+	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    
+	    pan = new GTen();
 	    this.setContentPane(pan);
 	    this.setVisible(true);
 	}
-	
 }
