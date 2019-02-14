@@ -1,10 +1,10 @@
 public class Tile {
-	Tile[][] board;
-	Flag type;
-	int level;
-	Point selected;
+	private Tile[][] board;
+	private Flag type;
+	private int level;
+	private Point selected;
 
-	Tile(int level) {
+	private Tile(int level) {
 		this.level = level;
 		this.selected = null;
 		if (level == 0) {
@@ -21,7 +21,7 @@ public class Tile {
 		}
 	}
 
-	Tile() {
+	public Tile() {
 		this.level = 2;
 		this.selected = null;
 		this.type = Flag.BOARD;
@@ -32,4 +32,21 @@ public class Tile {
 			}
 		}
 	}
+	
+	public Flag getFlag() {
+		return type;
+	}
+	
+	public Tile[][] getBoard() {
+		return board;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public Point getSelected() {
+		return selected;
+	}
+	
 }
