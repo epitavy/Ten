@@ -32,21 +32,49 @@ public class Tile {
 			}
 		}
 	}
-	
+
 	public Flag getFlag() {
 		return type;
 	}
-	
+
 	public Tile[][] getBoard() {
 		return board;
 	}
-	
+
 	public int getLevel() {
 		return level;
 	}
-	
+
 	public Point getSelected() {
 		return selected;
 	}
 	
+	
+
+	private boolean is_win(Flag player, Point pos) {
+		if (board == null)
+			return false;
+		if (wining_row(player, pos.x))
+			return true;
+		if (wining_col(player, pos.y))
+			return true;
+		return wining_diag_0(player) || wining_diag_1(player);
+	}
+
+	private boolean wining_row(Flag player, int row) {
+		return board[row][0].type == player && board[row][1].type == player && board[row][2].type == player;
+	}
+
+	private boolean wining_col(Flag player, int col) {
+		return board[0][col].type == player && board[1][col].type == player && board[2][col].type == player;
+	}
+
+	private boolean wining_diag_0(Flag player) {
+		return board[0][0].type == player && board[1][1].type == player && board[2][2].type == player;
+	}
+
+	private boolean wining_diag_1(Flag player) {
+		return board[2][0].type == player && board[1][1].type == player && board[0][2].type == player;
+	}
+
 }
