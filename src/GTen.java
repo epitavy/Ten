@@ -1,4 +1,5 @@
+import javax.swing.JPanel;
 
-public class GTen {
+public class GTen extends JPanel{
 
 }
