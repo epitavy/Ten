@@ -1,4 +1,3 @@
-public enum Flag
-{
+public enum Flag {
 	EMPTY, SQUARE, CIRCLE, TIE, BOARD;
 }
