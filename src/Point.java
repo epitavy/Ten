@@ -1,4 +1,5 @@
-public class Point {
+public class Point
+{
 	int x;
 	int y;
 	
@@ -7,6 +8,7 @@ public class Point {
 		this.x = x;
 		this.y = y;
 	}
+	
 	public Point()
 	{
 		this.x = 0;
