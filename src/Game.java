@@ -12,9 +12,11 @@ public class Game {
 		this.state = 2;
 	}
 	
-	execute()
+	void execute()
 	{
+		while(t.type == Flag.BOARD)
+		{
 		//TODO
+		}
 	}
-
 }
