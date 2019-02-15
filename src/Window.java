@@ -38,10 +38,10 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public void update(Tile board, Tile actual) {
-		game.update(actual, actual.getLevel());
-		map.update(board, 2);
-		//Bar.uppdate ??
+	public void update(Tile board, Tile actual, Player p) {
+		game.update(actual, p);
+		map.update(board, p);
+		//bar.uppdate ??
 	}
 	
 	public boolean getInput(Point p) {

@@ -12,6 +12,11 @@ public class Point {
 		this.y = 0;
 	}
 	
+	public Point(Point p) {
+		this.x = p.x;
+		this.y = p.y;
+	}
+	
 	public void print() {
 		System.out.println(x + " " + y);
 	}
@@ -20,8 +25,7 @@ public class Point {
 		return p != null && p.x >= 0 && p.x < 3 && p.y >= 0 && p.y < 3;
 	}
 	
-	public void copy(Point p)
-	{
+	public void copy(Point p) {
 		this.x = p.x;
 		this.y = p.y;
 	}

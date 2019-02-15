@@ -3,6 +3,7 @@ public class Tile {
 	private Flag type;
 	private int level;
 	private Point selected;
+	private int num;
 
 	private Tile(int level) {
 		this.level = level;
@@ -19,6 +20,7 @@ public class Tile {
 				}
 			}
 		}
+		this.num = 0;
 	}
 
 	public Tile() {
@@ -33,15 +35,21 @@ public class Tile {
 		}
 	}
 
-	
-	
+	public int getNum() {
+		return num;
+	}
+
+	public void incrementNum() {
+		this.num++;
+	}
+
 	public Flag getFlag() {
 		return type;
 	}
 
 	public Tile getCell(Point pos) {
-		if (type == Flag.BOARD && pos != null && pos.x >= 0 && pos.x < 3 && pos.y >= 0 && pos.y < 3)
-			return board[pos.x][pos.y];
+		if (this.type == Flag.BOARD && pos != null && pos.x >= 0 && pos.x < 3 && pos.y >= 0 && pos.y < 3)
+			return this.board[pos.x][pos.y];
 		return null;
 	}
 
@@ -59,9 +67,14 @@ public class Tile {
 
 	public void select(Point pos) {
 		if (type == Flag.BOARD && pos != null && pos.x >= 0 && pos.x < 3 && pos.y >= 0 && pos.y < 3) {
-			selected = pos;
+			if (this.selected == null) {
+				this.selected = new Point(pos);
+			} else {
+				this.selected.copy(pos);
+			}
+
 		} else {
-			selected = null;
+			this.selected = null;
 		}
 	}
 
@@ -73,16 +86,24 @@ public class Tile {
 		return 0;
 	}
 
-	public boolean win(Player player, Point pos) {
+	public boolean winOrTie(Player player, Point pos) {
 		if (isWin(player, pos)) {
 			this.board = null;
 			this.type = player.toFlag();
 			return true;
+		} else if (num == 9) {
+			this.board = null;
+			this.type = Flag.TIE;
+			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
-	public boolean isWin(Player player, Point pos) {
+	private boolean isWin(Player player, Point pos) {
+		if (num < 3) {
+			return false;
+		}
 		if (board == null)
 			return false;
 		if (winingRow(player, pos.x))
@@ -110,91 +131,5 @@ public class Tile {
 	private boolean winingDiag1(Player player) {
 		Flag p = player.toFlag();
 		return board[2][0].type == p && board[1][1].type == p && board[0][2].type == p;
-	}
-
-	// TO REMOVE
-
-	public void draw0() {
-		switch (type) {
-		case EMPTY:
-			System.out.print("_ ");
-			break;
-		case CIRCLE:
-			System.out.print("o ");
-			break;
-		case CROSS:
-			System.out.print("x ");
-			break;
-		default:
-			break;
-		}
-	}
-
-	public void draw1(int a ) {
-		switch(type) {
-		case BOARD:
-			for(int i = 0; i < 3; i++) {
-				board[a][i].draw0();
-			}
-			System.out.print(" ");
-			break;
-		case CROSS:
-			if(a == 1) {
-				System.out.print("  X    ");
-			}
-			else System.out.print("       ");
-			break;
-		case CIRCLE:
-			if(a == 1) {
-				System.out.print("  O    ");
-			}
-			else System.out.print("       ");
-			break;
-		case TIE:
-			if(a == 1) {
-				System.out.print("  -    ");
-			}
-			else System.out.print("       ");
-			break;
-		default:
-			break;
-		}
-	}
-	
-	public void draw2() {
-		if(type == Flag.BOARD) {
-			for(int i = 0; i < 3; i++) {
-				for(int a = 0; a < 3; a++) {
-					for(int j = 0; j < 3; j++) {
-						board[i][j].draw1(a);
-					}
-					System.out.println("");
-				}
-				System.out.println("");
-			}
-		} else if(type == Flag.CROSS) {
-			System.out.println("Cross win");
-		} else if(type == Flag.CIRCLE) {
-			System.out.println("Circle win");
-		} else {
-			System.out.println("It's a tie");
-		}
-	}
-	
-	public void draw() {
-		draw2();
-		System.out.println("");
-		if(selected != null) {
-			System.out.print("Main : ");
-			selected.print();
-		}
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
-				if(board[i][j].selected != null) {
-					System.out.print(i + " " + j + " : ");
-					board[i][j].selected.print();
-				}
-			}
-		}
 	}
 }

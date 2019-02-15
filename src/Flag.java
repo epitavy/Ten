@@ -1,7 +1,3 @@
 public enum Flag {
-	EMPTY,
-	CROSS,
-	CIRCLE,
-	TIE, 
-	BOARD;
+	EMPTY, CROSS, CIRCLE, TIE, BOARD;
 }
