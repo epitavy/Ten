@@ -50,6 +50,7 @@ public class Window extends JFrame {
 	}
 	
 	public boolean getInput(Point p) {
+		p = game.getCellOn();
 		return game.isClicked();
 	}
 }
