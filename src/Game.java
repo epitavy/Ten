@@ -12,10 +12,4 @@ public class Game {
 		this.state = 2;
 		w = new Window();
 	}
-
-	void execute() {
-		while (t.type == Flag.BOARD) {
-			// TODO
-		}
-	}
 }

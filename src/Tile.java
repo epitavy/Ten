@@ -8,7 +8,7 @@ public class Tile {
 		this.level = level;
 		this.selected = null;
 		if (level == 0) {
-			this.type = Flag.EMPTY;
+			this.type = Flag.TIE;
 			this.board = null;
 		} else {
 			this.type = Flag.BOARD;
