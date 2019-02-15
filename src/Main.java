@@ -2,8 +2,8 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Game game = new Game();
-//		g.execute();
-		Point a = new Point(0, 0);
+		game.execute();
+/*		Point a = new Point(0, 0);
 		Point b = new Point(0, 1);
 		Point c = new Point(0, 2);
 		Point d = new Point(1, 0);
@@ -14,8 +14,8 @@ public class Main {
 		Point i = new Point(2, 2);
 		
 		Point[] arr = {a, d, a, g, a, a};
-//		game.display(arr, arr.length);
-		game.display();
+		game.display(arr, arr.length);
+		game.display();*/
 	}
 
 }

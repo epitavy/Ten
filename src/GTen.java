@@ -19,7 +19,7 @@ public class GTen extends JPanel{
 	private Color cross = Color.blue;
 	private Color tie = new Color(50, 200, 0);
 	private Color black = Color.black;
-	private Color selected = new Color(255, 100, 200, 200);
+	private Color selected = new Color(255, 100, 200, 100);
 	
 	public GTen() {
 		this.addMouseListener(new MouseAdapter(){
@@ -48,7 +48,7 @@ public class GTen extends JPanel{
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
 		Point point = new Point(margin, margin);
-		drawBoard(g, this.board, point, maxDim - 2 * margin);
+		drawBoard(g, this.board, point, maxDim - 2 * margin, false);
 	}
 	
 	public void update(Tile board, int level) {
@@ -57,40 +57,46 @@ public class GTen extends JPanel{
 		repaint();
 	}
 	
-	private void drawBoard(Graphics g, Tile cell, Point pos, float length) {
+	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select) {
 		//General cell border
-		if(cell.getLevel() != 1) {
+		float cellspacing = length / 40;
+		if(select) {
+			g.setColor(this.selected);
+			g.fillRoundRect((int)(pos.x - cellspacing), (int)(pos.y - cellspacing), (int)(length + 2 * cellspacing), (int)(length + 2 * cellspacing),
+					(int)cellspacing, (int)cellspacing);
+			g.setColor(Color.white);
+			g.fillRoundRect(pos.x + 1, pos.y + 1, (int)length - 2, (int)length - 2, (int)(length / 10), (int)(length / 10));
+		}
+		
+		if(cell.getLevel() != 10) {
 			g.setColor(black);
 			g.drawRoundRect(pos.x, pos.y, (int)length, (int)length, (int)(length / 10), (int)(length / 10));
 		}
 		
-		
 		Flag f = cell.getFlag();
-		if(f == Flag.EMPTY)
+		if(f == Flag.EMPTY) {
+			if(cell.getLevel() != 0) {
+				System.out.println(cell.getLevel());
+			}
 			return;
-		else if(f != Flag.EMPTY && f != Flag.BOARD) {
+		} else if(f != Flag.BOARD) {
 			//Make the background grey
 			g.setColor(greyBg);
 			g.fillRoundRect(pos.x + 1, pos.y + 1, (int)length - 2, (int)length - 2, (int)(length / 10), (int)(length / 10));
 			drawSymbol(g, cell.getFlag(), pos, length);
 		}
-		else if(f == Flag.BOARD) {
-			float cellspacing = length / 40;
-			float sublength = length * 30 / 100;
+		else {
+			length = length * 30 / 100;
 			
 			for(int i = 0; i < 3; i++) {
 				for(int j = 0; j < 3; j++) {
+					float posx = pos.x + (i + 1) * cellspacing + i * length;
+					float posy = pos.y + (j + 1) * cellspacing + j * length;
 					if(cell.getSelected() != null && cell.getSelected().x == i && cell.getSelected().y == j) {
-						g.setColor(selected);
-						g.fillRoundRect((int)(pos.x - cellspacing), (int)(pos.y - cellspacing), (int)(length + 2 * cellspacing), (int)(length + 2 * cellspacing),
-								(int)cellspacing, (int)cellspacing);
-						g.setColor(Color.white);
-						g.fillRoundRect(pos.x + 1, pos.y + 1, (int)length - 2, (int)length - 2, (int)(length / 10), (int)(length / 10));
-						
+						drawBoard(g, cell.getCell(new Point(i, j)),new Point((int)posx, (int)posy), length, true);
+					} else {
+						drawBoard(g, cell.getCell(new Point(i, j)),new Point((int)posx, (int)posy), length, false);
 					}
-					float posx = pos.x + (i + 1) * cellspacing + i * sublength;
-					float posy = pos.y + (j + 1) * cellspacing + j * sublength;
-					drawBoard(g, cell.getBoard()[i][j],new Point((int)posx, (int)posy), sublength);
 				}
 			}
 		}
@@ -124,10 +130,15 @@ public class GTen extends JPanel{
 	public Point getCellOn() {
 		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
 		int margin = maxDim / 10;
-		return new Point((this.mousePosX - margin) / 3, (this.mousePosY - margin) / 3);
+		maxDim -= 2 * margin;
+		return new Point(((this.mousePosX - margin) * 3) / maxDim, ((this.mousePosY - margin) * 3) / maxDim);
 	}
 	
 	public boolean isClicked() {
-		return clicked;
+		if(clicked){
+			clicked = false;
+			return true;
+		}
+		return false;
 	}
 }

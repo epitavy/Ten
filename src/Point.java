@@ -19,4 +19,10 @@ public class Point {
 	public static boolean isValid(Point p) {
 		return p != null && p.x >= 0 && p.x < 3 && p.y >= 0 && p.y < 3;
 	}
+	
+	public void copy(Point p)
+	{
+		this.x = p.x;
+		this.y = p.y;
+	}
 }

@@ -41,6 +41,10 @@ public class Engine {
 		return board.getFlag();
 	}
 	
+	public Tile getActual() {
+		return actual;
+	}
+	
 	public boolean isWin() {
 		return win;
 	}

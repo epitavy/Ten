@@ -33,6 +33,8 @@ public class Tile {
 		}
 	}
 
+	
+	
 	public Flag getFlag() {
 		return type;
 	}

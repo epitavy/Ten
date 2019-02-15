@@ -38,19 +38,14 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public void update(Tile board) {
-		Point pos = board.getSelected();
-		if(pos == null)
-			game.update(board, 2);
-		else 
-			game.update(board.getBoard()[pos.x][pos.y], 1);
-		
+	public void update(Tile board, Tile actual) {
+		game.update(actual, actual.getLevel());
 		map.update(board, 2);
 		//Bar.uppdate ??
 	}
 	
 	public boolean getInput(Point p) {
-		p = game.getCellOn();
+		p.copy(game.getCellOn());
 		return game.isClicked();
 	}
 }
