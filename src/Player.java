@@ -1,7 +1,7 @@
 public enum Player {
 	CROSS(Flag.CROSS), CIRCLE(Flag.CIRCLE);
 
-	Flag f;
+	private Flag f;
 
 	private Player(Flag f) {
 		this.f = f;
