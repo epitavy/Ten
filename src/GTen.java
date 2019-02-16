@@ -9,10 +9,7 @@ public class GTen extends JPanel {
 
 	private Tile board;
 	private Player player;
-
-	private int mousePosX;
-	private int mousePosY;
-	private boolean clicked = false;
+	private Mouse mouse;
 
 	private Color colorBg;
 	final private Color circle = new Color(255, 0, 0);
@@ -24,17 +21,9 @@ public class GTen extends JPanel {
 	final private Color selected = new Color(255, 100, 200, 200);
 
 	public GTen() {
-		this.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				clicked = true;
-			}
-		});
-		this.addMouseMotionListener(new MouseAdapter() {
-			public void mouseMoved(MouseEvent e) {
-				mousePosX = e.getX();
-				mousePosY = e.getY();
-			}
-		});
+		mouse = new Mouse();
+		this.addMouseListener(mouse);
+		this.addMouseMotionListener(mouse);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -132,12 +121,12 @@ public class GTen extends JPanel {
 		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
 		int margin = maxDim / 10;
 		maxDim -= 2 * margin;
-		return new Point(((this.mousePosX - margin) * 3) / maxDim, ((this.mousePosY - margin) * 3) / maxDim);
+		return new Point(((mouse.pos.x - margin) * 3) / maxDim, ((mouse.pos.y - margin) * 3) / maxDim);
 	}
 
 	public boolean isClicked() {
-		if (clicked) {
-			clicked = false;
+		if (mouse.clickedLeft) {
+			mouse.clickedLeft = false;
 			return true;
 		}
 		return false;
