@@ -16,7 +16,7 @@ public class Game {
 		while (!e.isWin()) {
 			clic = w.getInput(p);
 			e.run(p, clic);
-			w.update(e.getMap(), e.getActual(), e.getPlayer());
+			w.update(e.getMap(), e.getActual(), e.getPlayer(), e.getLast());
 		}
 		printWinner(e.getWinner());
 	}

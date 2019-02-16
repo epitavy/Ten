@@ -38,9 +38,9 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public void update(Tile board, Tile actual, Player p) {
+	public void update(Tile board, Tile actual, Player p, Point[] last) {
 		game.update(actual, p);
-		map.update(board, p);
+		map.update(board, p, last);
 		//bar.uppdate ??
 	}
 	

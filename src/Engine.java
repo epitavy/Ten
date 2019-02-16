@@ -40,6 +40,10 @@ public class Engine {
 	public Tile getActual() {
 		return actual;
 	}
+	
+	public Point[] getLast() {
+		return last;
+	}
 
 	public boolean isWin() {
 		return winner != Flag.BOARD && winner != Flag.EMPTY;

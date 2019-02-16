@@ -9,6 +9,7 @@ public class GTen extends JPanel {
 
 	private Tile board;
 	private Player player;
+	private Point[] previous;
 	private Mouse mouse;
 	private BasicGraphics basicG;
 	
@@ -19,6 +20,7 @@ public class GTen extends JPanel {
 	public GTen() {
 		basicG = new BasicGraphics();
 		mouse = new Mouse();
+		previous = null;
 		this.addMouseListener(mouse);
 		this.addMouseMotionListener(mouse);
 	}
@@ -27,6 +29,11 @@ public class GTen extends JPanel {
 		this.board = board;
 		this.player = p;
 		repaint();
+	}
+	
+	public void update(Tile board, Player p, Point[] previous) {
+		this.previous = previous;
+		update(board, p);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -48,11 +55,11 @@ public class GTen extends JPanel {
 		basicG.fillRect(new Point(), this.getWidth(), this.getHeight(), colorBg);
 
 		Point point = new Point(margin, margin);
-		drawBoard(g, this.board, point, maxDim - 2 * margin, false);
+		drawBoard(g, this.board, point, maxDim - 2 * margin, false, false);
 	}
 
 
-	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select) {
+	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean previous) {
 		// General cell border
 		float cellspacing = length / 30;
 		
@@ -68,7 +75,7 @@ public class GTen extends JPanel {
 
 		Flag f = cell.getFlag();
 		if (f != Flag.BOARD && f != Flag.EMPTY) {
-			drawSymbol(cell.getFlag(), pos, length);
+			drawSymbol(cell.getFlag(), pos, length, previous);
 		} else if (f != Flag.EMPTY) {
 			float sublength = length * 30 / 100;
 
@@ -76,25 +83,40 @@ public class GTen extends JPanel {
 				for (int j = 0; j < 3; j++) {
 					float posx = pos.x + (i + 1) * cellspacing + i * sublength;
 					float posy = pos.y + (j + 1) * cellspacing + j * sublength;
-					if (cell.getSelected() != null && cell.getSelected().x == i && cell.getSelected().y == j) {
-						drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength, true);
-					} else {
-						drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength,
-								false);
+					
+					boolean selected = false;
+					boolean isPreviousMove = false;
+					if (cell.getSelected() != null && cell.getSelected().x == i && cell.getSelected().y == j)
+						selected = true;
+					if(this.previous != null && this.previous[0] != null) {
+						if(cell.getLevel() == 2 && this.previous[0].x == i && this.previous[0].y == j)
+							isPreviousMove = true;
+						else if(previous && cell.getLevel() == 1 && this.previous[1].x == i && this.previous[1].y == j)
+							isPreviousMove = true;
 					}
+					
+					drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength,
+							selected, isPreviousMove);
 				}
 			}
 		}
 	}
 
-	private void drawSymbol(Flag f, Point pos, float length) {
+	private void drawSymbol(Flag f, Point pos, float length, boolean previous) {
 
 		float margin = length / 10;
 		if (f == Flag.CIRCLE) {
-			basicG.drawCircle(pos, margin, TenColors.circle, colorBg);
+			if(previous)
+				basicG.drawCircle(pos, margin, TenColors.circleLast, colorBg);
+			else
+				basicG.drawCircle(pos, margin, TenColors.circle, colorBg);
 		} else if (f == Flag.CROSS) {
-			basicG.drawCross(pos, margin, TenColors.cross, colorBg);
+			if(previous)
+				basicG.drawCross(pos, margin, TenColors.crossLast, colorBg);
+			else
+				basicG.drawCross(pos, margin, TenColors.cross, colorBg);
 		} else if (f == Flag.TIE) {
+			//Flag TIE and previous set to true should never happen!
 			basicG.drawTie(pos, margin, TenColors.tie, colorBg);
 		}
 	}
