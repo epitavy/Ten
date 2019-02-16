@@ -45,7 +45,12 @@ public class Window extends JFrame {
 	}
 	
 	public boolean getInput(Point p) {
-		p.copy(game.getCellOn());
+		Point temp = game.getCellOn();
+		if(temp == null) {
+			p.change(-1, -1);
+		} else {
+			p.copy(temp);
+		}
 		return game.isClicked();
 	}
 }
