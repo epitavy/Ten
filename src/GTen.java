@@ -60,9 +60,6 @@ public class GTen extends JPanel {
 		Point point = new Point(marginx, marginy);
 		drawBoard(g, this.board, point, length, false, false);
 	}
-	/*
-	 * margin = this.Width - margin - length
-	 */
 
 
 	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean isPrevious) {
