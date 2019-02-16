@@ -71,12 +71,15 @@ public class GTen extends JPanel {
 			pos.y -= length * zoom / 2;
 			length *= (1 + zoom);
 		}	
-
-		if (cell.getLevel() == 0)
-			basicG.drawRoundSquare(pos, length, length / 10, TenColors.black);
-
+		//if (cell.getLevel() == 0)
+		//	basicG.drawRoundSquare(pos, length, length / 10, TenColors.black);
+		 float coeff = 0.67f;
+		
+		
 		Flag f = cell.getFlag();
 		if (f != Flag.BOARD && f != Flag.EMPTY) {
+			length *= coeff;
+			pos.change((int) (pos.x + length * (1 - coeff)/ (2 * coeff)), (int) (pos.y + length * (1 - coeff)/ (2 * coeff)));
 			drawSymbol(cell.getFlag(), pos, length, isPrevious);
 		} else if (f != Flag.EMPTY) {
 			float sublength = length * 30 / 100;
@@ -92,6 +95,15 @@ public class GTen extends JPanel {
 					drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength,
 							selected, isPrev);
 				}
+			}
+		}
+		else {
+			length *= coeff;
+			pos.change((int) (pos.x + length * (1 - coeff)/ (2 * coeff)), (int) (pos.y + length * (1 - coeff)/ (2 * coeff)));
+			if (this.player == Player.CIRCLE) {
+				basicG.drawCircle(pos, length / 10, Color.WHITE, colorBg);
+			} else {
+				basicG.drawCross(pos, length / 10, Color.WHITE, colorBg);
 			}
 		}
 	}
