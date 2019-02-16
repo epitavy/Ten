@@ -54,9 +54,15 @@ public class GTen extends JPanel {
 		//Draw uniform overriding background all over the panel
 		basicG.fillRect(new Point(), this.getWidth(), this.getHeight(), colorBg);
 
-		Point point = new Point(margin, margin);
-		drawBoard(g, this.board, point, maxDim - 2 * margin, false, false);
+		float length = maxDim - 2 * margin;
+		int marginx = (int) ((this.getWidth() - length) / 2);
+		int marginy = (int) ((this.getHeight() - length) / 2);
+		Point point = new Point(marginx, marginy);
+		drawBoard(g, this.board, point, length, false, false);
 	}
+	/*
+	 * margin = this.Width - margin - length
+	 */
 
 
 	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean isPrevious) {
