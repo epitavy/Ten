@@ -10,8 +10,9 @@ public class GTen extends JPanel {
 	private Tile board;
 	private Player player;
 	private Mouse mouse;
-	
 	private BasicGraphics basicG;
+	
+	final float zoom = 0.15f;
 
 	public GTen() {
 		basicG = new BasicGraphics();
@@ -49,7 +50,14 @@ public class GTen extends JPanel {
 
 	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select) {
 		// General cell border
-		float cellspacing = length / 40;
+		float cellspacing = length / 30;
+		
+		//Make the cell bigger if selected
+		if(select) {
+			pos.x -= length * zoom / 2;
+			pos.y -= length * zoom / 2;
+			length *= (1 + zoom);
+		}	
 
 		if (cell.getLevel() == 0) {
 			basicG.drawRoundSquare(pos, length, length / 10, ColorType.BLACK);
@@ -57,11 +65,6 @@ public class GTen extends JPanel {
 
 		Flag f = cell.getFlag();
 		if (f != Flag.BOARD && f != Flag.EMPTY) {
-			/*// Make the background grey
-			g.setColor(colorBg);
-			g.fillRoundRect(pos.x + 1, pos.y + 1, (int) length - 2, (int) length - 2, (int) (length / 10),
-					(int) (length / 10));
-			basicG.fillRoundSquare(pos, length - 2, length / 10, ColorType.BACKGROUND);*/
 			drawSymbol(cell.getFlag(), pos, length);
 		} else if (f != Flag.EMPTY) {
 			float sublength = length * 30 / 100;
@@ -78,11 +81,6 @@ public class GTen extends JPanel {
 					}
 				}
 			}
-		}
-		if (select) {
-			pos.x -= cellspacing;
-			pos.y -= cellspacing;
-			basicG.fillRoundSquare(pos, length + 2 * cellspacing, cellspacing, ColorType.SELECTED);
 		}
 	}
 
@@ -102,7 +100,11 @@ public class GTen extends JPanel {
 		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
 		int margin = maxDim / 10;
 		maxDim -= 2 * margin;
-		return new Point(((mouse.pos.x - margin) * 3) / maxDim, ((mouse.pos.y - margin) * 3) / maxDim);
+		int x = mouse.pos.x - margin;
+		int y = mouse.pos.y - margin;
+		if(x < 0 || y < 0)
+			return null;
+		return new Point(x * 3 / maxDim, y * 3 / maxDim);
 	}
 
 	public boolean isClicked() {
