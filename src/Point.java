@@ -29,4 +29,10 @@ public class Point {
 		this.x = p.x;
 		this.y = p.y;
 	}
+	
+	public void change(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 }

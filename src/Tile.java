@@ -86,20 +86,21 @@ public class Tile {
 		return 0;
 	}
 
-	public boolean winOrTie(Player player, Point pos) {
-		if (isWin(player, pos)) {
-			this.board = null;
-			this.type = player.toFlag();
-			return true;
-		} else if (num == 9) {
-			this.board = null;
-			this.type = Flag.TIE;
-			return true;
-		} else {
-			return false;
-		}
+	public Flag winOrTie(Player player, Point pos) {
+		if (isWin(player, pos))
+			return player.toFlag();
+		if (num == 9)
+			return Flag.TIE;
+		return Flag.BOARD;
 	}
 
+	public void changeFlag(Flag f) {
+		if (f != Flag.BOARD && f != Flag.EMPTY) {
+			this.board = null;
+			this.type = f;
+		}
+	}
+	
 	private boolean isWin(Player player, Point pos) {
 		if (num < 3) {
 			return false;
