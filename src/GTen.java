@@ -10,38 +10,15 @@ public class GTen extends JPanel {
 	private Tile board;
 	private Player player;
 	private Mouse mouse;
-
-	private Color colorBg;
-	final private Color circle = new Color(255, 0, 0);
-	final private Color circleBg = new Color(255, 180, 180);
-	final private Color cross = new Color(0, 0, 255);
-	final private Color crossBg = new Color(180, 180, 255);
-	final private Color tie = new Color(30, 150, 10);
-	final private Color black = Color.black;
-	final private Color selected = new Color(255, 100, 200, 200);
+	private BasicGraphics basicG;
+	
+	final float zoom = 0.15f;
 
 	public GTen() {
+		basicG = new BasicGraphics();
 		mouse = new Mouse();
 		this.addMouseListener(mouse);
 		this.addMouseMotionListener(mouse);
-	}
-
-	public void paintComponent(Graphics g) {
-		if (board == null)
-			return;
-		// Force drawing in a square
-		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
-
-		int margin = maxDim / 10;
-		if (this.player == Player.CIRCLE)
-			colorBg = circleBg;
-		else
-			colorBg = crossBg;
-		g.setColor(colorBg);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-		Point point = new Point(margin, margin);
-		drawBoard(g, this.board, point, maxDim - 2 * margin, false);
 	}
 
 	public void update(Tile board, Player p) {
@@ -49,23 +26,46 @@ public class GTen extends JPanel {
 		this.player = p;
 		repaint();
 	}
+	
+	public void paintComponent(Graphics g) {
+		if (this.board == null)
+			return;
+		
+		this.basicG.g = g;
+		// Force drawing in a square
+		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
+
+		int margin = maxDim / 10;
+		
+		//Set color according to player color
+		basicG.setBgColor(this.player);
+		
+		//Draw uniform overriding background all over the panel
+		basicG.fillRect(new Point(), this.getWidth(), this.getHeight(), ColorType.BACKGROUND);
+
+		Point point = new Point(margin, margin);
+		drawBoard(g, this.board, point, maxDim - 2 * margin, false);
+	}
+
 
 	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select) {
 		// General cell border
-		float cellspacing = length / 40;
+		float cellspacing = length / 30;
+		
+		//Make the cell bigger if selected
+		if(select) {
+			pos.x -= length * zoom / 2;
+			pos.y -= length * zoom / 2;
+			length *= (1 + zoom);
+		}	
 
 		if (cell.getLevel() == 0) {
-			g.setColor(black);
-			g.drawRoundRect(pos.x, pos.y, (int) length, (int) length, (int) (length / 10), (int) (length / 10));
+			basicG.drawRoundSquare(pos, length, length / 10, ColorType.BLACK);
 		}
 
 		Flag f = cell.getFlag();
 		if (f != Flag.BOARD && f != Flag.EMPTY) {
-			// Make the background grey
-			g.setColor(colorBg);
-			g.fillRoundRect(pos.x + 1, pos.y + 1, (int) length - 2, (int) length - 2, (int) (length / 10),
-					(int) (length / 10));
-			drawSymbol(g, cell.getFlag(), pos, length);
+			drawSymbol(cell.getFlag(), pos, length);
 		} else if (f != Flag.EMPTY) {
 			float sublength = length * 30 / 100;
 
@@ -82,38 +82,17 @@ public class GTen extends JPanel {
 				}
 			}
 		}
-		if (select) {
-			g.setColor(this.selected);
-			g.fillRoundRect((int) (pos.x - cellspacing), (int) (pos.y - cellspacing), (int) (length + 2 * cellspacing),
-					(int) (length + 2 * cellspacing), (int) cellspacing, (int) cellspacing);
-		}
 	}
 
-	private void drawSymbol(Graphics g, Flag f, Point pos, float length) {
+	private void drawSymbol(Flag f, Point pos, float length) {
 
 		float margin = length / 10;
 		if (f == Flag.CIRCLE) {
-			g.setColor(circle);
-			g.fillOval((int) (pos.x + margin), (int) (pos.y + margin), (int) (8 * margin), (int) (8 * margin));
-			g.setColor(colorBg);
-			g.fillOval((int) (pos.x + 2 * margin), (int) (pos.y + 2 * margin), (int) (6 * margin), (int) (6 * margin));
+			basicG.drawCircle(pos, margin);
 		} else if (f == Flag.CROSS) {
-			g.setColor(cross);
-			margin /= 2;
-			int[] xPoints1 = { (int) (pos.x + margin), (int) (pos.x + 3 * margin), (int) (pos.x + 19 * margin),
-					(int) (pos.x + 17 * margin) };
-			int[] yPoints1 = { (int) (pos.y + 3 * margin), (int) (pos.y + margin), (int) (pos.y + 17 * margin),
-					(int) (pos.y + 19 * margin) };
-			int[] xPoints2 = { (int) (pos.x + 17 * margin), (int) (pos.x + 19 * margin), (int) (pos.x + 3 * margin),
-					(int) (pos.x + margin) };
-			int[] yPoints2 = { (int) (pos.y + margin), (int) (pos.y + 3 * margin), (int) (pos.y + 19 * margin),
-					(int) (pos.y + 17 * margin) };
-			g.fillPolygon(xPoints1, yPoints1, 4);
-			g.fillPolygon(xPoints2, yPoints2, 4);
+			basicG.drawCross(pos, margin);
 		} else if (f == Flag.TIE) {
-			g.setColor(tie);
-			g.fillRoundRect((int) (pos.x + margin), (int) (pos.y + 4 * margin), (int) (8 * margin), (int) (2 * margin),
-					(int) margin, (int) margin);
+			basicG.drawTie(pos, margin);
 		}
 	}
 
@@ -121,7 +100,11 @@ public class GTen extends JPanel {
 		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
 		int margin = maxDim / 10;
 		maxDim -= 2 * margin;
-		return new Point(((mouse.pos.x - margin) * 3) / maxDim, ((mouse.pos.y - margin) * 3) / maxDim);
+		int x = mouse.pos.x - margin;
+		int y = mouse.pos.y - margin;
+		if(x < 0 || y < 0)
+			return null;
+		return new Point(x * 3 / maxDim, y * 3 / maxDim);
 	}
 
 	public boolean isClicked() {
