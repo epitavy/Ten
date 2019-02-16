@@ -59,8 +59,7 @@ public class GTen extends JPanel {
 	}
 
 
-	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean previous) {
-		// General cell border
+	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean isPrevious) {
 		float cellspacing = length / 30;
 		
 		//Make the cell bigger if selected
@@ -75,7 +74,7 @@ public class GTen extends JPanel {
 
 		Flag f = cell.getFlag();
 		if (f != Flag.BOARD && f != Flag.EMPTY) {
-			drawSymbol(cell.getFlag(), pos, length, previous);
+			drawSymbol(cell.getFlag(), pos, length, isPrevious);
 		} else if (f != Flag.EMPTY) {
 			float sublength = length * 30 / 100;
 
@@ -84,24 +83,30 @@ public class GTen extends JPanel {
 					float posx = pos.x + (i + 1) * cellspacing + i * sublength;
 					float posy = pos.y + (j + 1) * cellspacing + j * sublength;
 					
-					boolean selected = false;
-					boolean isPreviousMove = false;
-					if (cell.getSelected() != null && cell.getSelected().x == i && cell.getSelected().y == j)
-						selected = true;
-					if(this.previous != null && this.previous[0] != null) {
-						if(cell.getLevel() == 2 && this.previous[0].x == i && this.previous[0].y == j)
-							isPreviousMove = true;
-						else if(previous && cell.getLevel() == 1 && this.previous[1].x == i && this.previous[1].y == j)
-							isPreviousMove = true;
-					}
-					
+					boolean selected = isSelected(cell, i, j);
+					boolean isPrev = isPreviousMove(cell, this.previous, isPrevious, i, j);
+
 					drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength,
-							selected, isPreviousMove);
+							selected, isPrev);
 				}
 			}
 		}
 	}
-
+	
+	private boolean isSelected(Tile cell, int i, int j) {
+		return cell.getSelected() != null && cell.getSelected().x == i && cell.getSelected().y == j;
+	}
+	
+	private boolean isPreviousMove(Tile cell, Point[] prev, boolean isPrevious, int i, int j) {
+		if(prev != null && prev[0] != null) {
+			if(cell.getLevel() == 2 && prev[0].x == i && prev[0].y == j)
+				return true;
+			else if(isPrevious && cell.getLevel() == 1 && prev[1].x == i && prev[1].y == j)
+				return true;
+		}
+		return false;
+	}
+	
 	private void drawSymbol(Flag f, Point pos, float length, boolean previous) {
 
 		float margin = length / 10;
