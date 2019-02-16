@@ -13,6 +13,8 @@ public class GTen extends JPanel {
 	private BasicGraphics basicG;
 	
 	final float zoom = 0.15f;
+	
+	private Color colorBg;
 
 	public GTen() {
 		basicG = new BasicGraphics();
@@ -37,11 +39,13 @@ public class GTen extends JPanel {
 
 		int margin = maxDim / 10;
 		
-		//Set color according to player color
-		basicG.setBgColor(this.player);
+		if(this.player == Player.CIRCLE)
+			colorBg = TenColors.circleBg;
+		else
+			colorBg = TenColors.crossBg;
 		
 		//Draw uniform overriding background all over the panel
-		basicG.fillRect(new Point(), this.getWidth(), this.getHeight(), ColorType.BACKGROUND);
+		basicG.fillRect(new Point(), this.getWidth(), this.getHeight(), colorBg);
 
 		Point point = new Point(margin, margin);
 		drawBoard(g, this.board, point, maxDim - 2 * margin, false);
@@ -59,9 +63,8 @@ public class GTen extends JPanel {
 			length *= (1 + zoom);
 		}	
 
-		if (cell.getLevel() == 0) {
-			basicG.drawRoundSquare(pos, length, length / 10, ColorType.BLACK);
-		}
+		if (cell.getLevel() == 0)
+			basicG.drawRoundSquare(pos, length, length / 10, TenColors.black);
 
 		Flag f = cell.getFlag();
 		if (f != Flag.BOARD && f != Flag.EMPTY) {
@@ -88,11 +91,11 @@ public class GTen extends JPanel {
 
 		float margin = length / 10;
 		if (f == Flag.CIRCLE) {
-			basicG.drawCircle(pos, margin);
+			basicG.drawCircle(pos, margin, TenColors.circle, colorBg);
 		} else if (f == Flag.CROSS) {
-			basicG.drawCross(pos, margin);
+			basicG.drawCross(pos, margin, TenColors.cross, colorBg);
 		} else if (f == Flag.TIE) {
-			basicG.drawTie(pos, margin);
+			basicG.drawTie(pos, margin, TenColors.tie, colorBg);
 		}
 	}
 
