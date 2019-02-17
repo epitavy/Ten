@@ -10,6 +10,7 @@ public class Window extends JFrame {
 	private GTen game;
 	private GTopBar bar;
 	private GTen map;
+	private GMenu menu;
 	final int width = 1200;
 	final int height = 900;
 	
@@ -20,6 +21,7 @@ public class Window extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		//Panels for game
 		game = new GTen();
 		game.setBackground(Color.red);
 		map = new GTen();
@@ -29,11 +31,18 @@ public class Window extends JFrame {
 		bar.setPreferredSize(new Dimension(0, height / 9));
 		bar.setBackground(Color.green);
 		
-		this.setLayout(new BorderLayout());
+		//Panel for menu
+		menu = new GMenu();
+		menu.setPreferredSize(new Dimension(110, 100));
+		menu.setBackground(Color.orange);
+		this.getContentPane().add(menu, BorderLayout.CENTER);
+		
+		
+		/*this.setLayout(new BorderLayout());
 		
 		this.getContentPane().add(game, BorderLayout.CENTER);
 		this.getContentPane().add(bar, BorderLayout.NORTH);
-		this.getContentPane().add(map, BorderLayout.EAST);
+		this.getContentPane().add(map, BorderLayout.EAST);*/
 			
 		this.setVisible(true);
 	}
