@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Engine {
 	private Tile board;
 	private Tile actual;
@@ -6,14 +8,24 @@ public class Engine {
 	private Flag winner;
 	private Point[] last;
 
-	public Engine() {
+	public Engine(Player p) {
 		this.board = new Tile();
 		this.last = new Point[2];
 		for (int i = 0; i < 2; i++)
 			last[i] = null;
 		this.actual = this.board;
 		this.save = "";
-		this.p = Player.CROSS;
+		if(p != null) {
+			this.p = p;
+		} else {
+			Random r = new Random();
+			int i = r.nextInt(2);
+			if (i == 0) {
+				this.p = Player.CROSS;
+			} else {
+				this.p = Player.CIRCLE;
+			}
+		}
 		this.winner = Flag.BOARD;
 	}
 

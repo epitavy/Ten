@@ -1,7 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
@@ -105,9 +103,9 @@ public class GTen extends JPanel {
 			length *= coeff;
 			pos.change((int) (pos.x + length * (1 - coeff)/ (2 * coeff)), (int) (pos.y + length * (1 - coeff)/ (2 * coeff)));
 			if (this.player == Player.CIRCLE) {
-				basicG.drawCircle(pos, length / 10, Color.WHITE, colorBg);
+				basicG.drawCircle(pos, length / 10, TenColors.empty, colorBg);
 			} else {
-				basicG.drawCross(pos, length / 10, Color.WHITE, colorBg);
+				basicG.drawCross(pos, length / 10, TenColors.empty, colorBg);
 			}
 		}
 	}

@@ -1,25 +1,34 @@
-import java.util.Scanner;
-
 public class Game {
 	Engine e;
 	Window w;
 	Point p;
 	boolean clic;
+	boolean stop;
+	Player firstPlayer;
 
 	public Game() {
-		this.e = new Engine();
+		this.e = new Engine(null);
+		this.firstPlayer = e.getPlayer();
 		w = new Window();
 		p = new Point();
+		stop = false;
 	}
 
 	void execute() {
-		while (!e.isWin()) {
-			clic = w.getInput(p);
-			e.run(p, clic);
-			w.update(e.getMap(), e.getActual(), e.getPlayer(), e.getLast());
-			break;
-		}
-		w.ends(Flag.TIE);
+		do {
+			while (!e.isWin()) {
+				clic = w.getInput(p);
+				e.run(p, clic);
+				w.update(e.getMap(), e.getActual(), e.getPlayer(), e.getLast());
+				//break;
+			}
+			w.ends(e.getWinner());
+			//stop = true;
+			
+			
+		} while (!stop);
+		//ici faut faire fermer la fenêtre
+		//w.dispatchEvent(new WindowEvent(w, WindowEvent.WINDOW_CLOSING));
 	}
 	
 	void printWinner(Flag f) {
