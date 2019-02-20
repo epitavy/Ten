@@ -35,4 +35,7 @@ public class Point {
 		this.y = y;
 	}
 	
+	public boolean equals(Point p) {
+		return p != null && this.x == p.x && this.y == p.y;
+	}
 }

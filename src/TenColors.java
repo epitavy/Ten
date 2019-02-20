@@ -12,5 +12,5 @@ public abstract class TenColors {
 	static Color black = Color.black;
 	static Color selected = new Color(255, 100, 200, 200);
 	static Color empty = new Color(255, 250, 210);
-	static Color unselected = new Color(100, 90, 85);
+	static Color unselected = new Color(180, 180, 170);
 }

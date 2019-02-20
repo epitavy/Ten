@@ -47,8 +47,9 @@ public class Window extends JFrame {
 	}
 	
 	public void update(Tile board, Tile actual, Player p, Point[] last) {
-		game.update(actual, p);
-		map.update(board, p, last);
+		boolean unused = board.equals(actual);
+		game.update(actual, p, unused);
+		map.update(board, p, last, unused);
 	}
 	
 	public boolean getInput(Point p) {

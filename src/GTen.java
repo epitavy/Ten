@@ -10,7 +10,7 @@ public class GTen extends JPanel {
 	private Point[] previous;
 	private Mouse mouse;
 	private BasicGraphics basicG;
-	
+	private boolean unused;
 	final float zoom = 0.15f;
 	
 	private Color colorBg;
@@ -24,15 +24,16 @@ public class GTen extends JPanel {
 		this.addMouseMotionListener(mouse);
 	}
 
-	public void update(Tile board, Player p) {
+	public void update(Tile board, Player p, boolean unused) {
+		this.unused = unused;
 		this.board = board;
 		this.player = p;
 		repaint();
 	}
 	
-	public void update(Tile board, Player p, Point[] previous) {
+	public void update(Tile board, Player p, Point[] previous, boolean unused) {
 		this.previous = previous;
-		update(board, p);
+		update(board, p, unused);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -60,11 +61,11 @@ public class GTen extends JPanel {
 		int marginx = (int) ((this.getWidth() - length) / 2);
 		int marginy = (int) ((this.getHeight() - length) / 2);
 		Point point = new Point(marginx, marginy);
-		drawBoard(g, this.board, point, length, false, false);
+		drawBoard(g, this.board, point, length, false, false, TenColors.empty);
 	}
 
 
-	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean isPrevious) {
+	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean isPrevious, Color empty) {
 		float cellspacing = length / 30;
 		
 		//Make the cell bigger if selected
@@ -85,7 +86,7 @@ public class GTen extends JPanel {
 			drawSymbol(cell.getFlag(), pos, length, isPrevious);
 		} else if (f != Flag.EMPTY) {
 			float sublength = length * 30 / 100;
-
+			Point p = new Point();
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					float posx = pos.x + (i + 1) * cellspacing + i * sublength;
@@ -93,9 +94,15 @@ public class GTen extends JPanel {
 					
 					boolean selected = isSelected(cell, i, j);
 					boolean isPrev = isPreviousMove(cell, this.previous, isPrevious, i, j);
-
-					drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength,
-							selected, isPrev);
+					p.change(i, j);
+					if (!unused) {
+						if(cell.getLevel() == 2 && (cell.getSelected() == null || cell.getSelected().equals(p))) {
+							empty = TenColors.empty;
+						} else if (cell.getLevel() == 2) {
+							empty = TenColors.unselected;
+						}
+				}
+					drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength, selected, isPrev, empty);
 				}
 			}
 		}
@@ -103,9 +110,9 @@ public class GTen extends JPanel {
 			length *= coeff;
 			pos.change((int) (pos.x + length * (1 - coeff)/ (2 * coeff)), (int) (pos.y + length * (1 - coeff)/ (2 * coeff)));
 			if (this.player == Player.CIRCLE) {
-				basicG.drawCircle(pos, length / 10, TenColors.empty, colorBg);
+				basicG.drawCircle(pos, length / 10, empty, colorBg);
 			} else {
-				basicG.drawCross(pos, length / 10, TenColors.empty, colorBg);
+				basicG.drawCross(pos, length / 10, empty, colorBg);
 			}
 		}
 	}
