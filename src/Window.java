@@ -10,6 +10,7 @@ public class Window extends JFrame {
 	private GTen game;
 	private GTopBar bar;
 	private GTen map;
+	private GMenu menu;
 	final int width = 1200;
 	final int height = 900;
 	
@@ -20,6 +21,7 @@ public class Window extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		//Panels for game
 		game = new GTen();
 		game.setBackground(Color.red);
 		map = new GTen();
@@ -28,6 +30,13 @@ public class Window extends JFrame {
 		bar = new GTopBar();
 		bar.setPreferredSize(new Dimension(0, height / 9));
 		bar.setBackground(Color.green);
+		
+		//Panel for menu
+		/*menu = new GMenu();
+		menu.setPreferredSize(new Dimension(110, 100));
+		menu.setBackground(Color.orange);
+		this.getContentPane().add(menu, BorderLayout.CENTER);*/
+		
 		
 		this.setLayout(new BorderLayout());
 		
@@ -41,7 +50,6 @@ public class Window extends JFrame {
 	public void update(Tile board, Tile actual, Player p, Point[] last) {
 		game.update(actual, p);
 		map.update(board, p, last);
-		//bar.uppdate ??
 	}
 	
 	public boolean getInput(Point p) {
@@ -52,5 +60,11 @@ public class Window extends JFrame {
 			p.copy(temp);
 		}
 		return game.isClicked();
+	}
+	
+	public void ends(Flag winner) {
+		game.drawEnd(winner);
+		map.setBackgroundEnd(winner);
+		bar.drawEnd(winner);
 	}
 }

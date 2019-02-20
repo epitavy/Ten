@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 public class BasicGraphics {
@@ -51,6 +53,28 @@ public class BasicGraphics {
 	public void fillRect(Point p, float width, float height, Color c) {
 		g.setColor(c);
 		g.fillRect(p.x, p.y, (int)width, (int)height);
+	}
+
+	public void drawBorderedRect(Point p, float width, float height, float border, Color bgColor, Color borderColor) {
+		g.setColor(borderColor);
+		g.fillRoundRect(p.x, p.y, (int)width, (int)height, (int)(width / 10), (int)(height / 10));
+		g.setColor(bgColor);
+		g.fillRoundRect((int)(p.x + border), (int)(p.y + border), (int)(width - 2 * border), (int)(height - 2 * border), (int)(width / 10), (int)(height / 10));
+		
+	}
+
+	public void fillRoundRect(Point p, float width, float height, float arc, Color c) {
+		g.setColor(c);
+		g.fillRoundRect(p.x, p.y, (int)width, (int)height, (int)arc, (int)arc);
+	}
+	
+	public void drawCenteredString(String s, int x, int y, Color c, Font f) {
+		FontMetrics metrics = g.getFontMetrics(f);
+	    // Determine the X coordinate for the text
+	    x -= metrics.stringWidth(s) / 2;
+	    g.setFont(f);
+	    g.setColor(c);
+	    g.drawString(s, x, y);
 	}
 	
 	

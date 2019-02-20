@@ -17,8 +17,9 @@ public class Game {
 			clic = w.getInput(p);
 			e.run(p, clic);
 			w.update(e.getMap(), e.getActual(), e.getPlayer(), e.getLast());
+			break;
 		}
-		printWinner(e.getWinner());
+		w.ends(Flag.TIE);
 	}
 	
 	void printWinner(Flag f) {
