@@ -52,6 +52,19 @@ public class BasicGraphics {
 		g.setColor(c);
 		g.fillRect(p.x, p.y, (int)width, (int)height);
 	}
+
+	public void drawBorderedRect(Point p, float width, float height, float border, Color bgColor, Color borderColor) {
+		g.setColor(borderColor);
+		g.fillRoundRect(p.x, p.y, (int)width, (int)height, (int)(width / 10), (int)(height / 10));
+		g.setColor(bgColor);
+		g.fillRoundRect((int)(p.x + border), (int)(p.y + border), (int)(width - 2 * border), (int)(height - 2 * border), (int)(width / 10), (int)(height / 10));
+		
+	}
+
+	public void fillRoundRect(Point p, float width, float height, float arc, Color c) {
+		g.setColor(c);
+		g.fillRoundRect(p.x, p.y, (int)width, (int)height, (int)arc, (int)arc);
+	}
 	
 	
 }

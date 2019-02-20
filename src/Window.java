@@ -32,17 +32,17 @@ public class Window extends JFrame {
 		bar.setBackground(Color.green);
 		
 		//Panel for menu
-		menu = new GMenu();
+		/*menu = new GMenu();
 		menu.setPreferredSize(new Dimension(110, 100));
 		menu.setBackground(Color.orange);
-		this.getContentPane().add(menu, BorderLayout.CENTER);
+		this.getContentPane().add(menu, BorderLayout.CENTER);*/
 		
 		
-		/*this.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout());
 		
 		this.getContentPane().add(game, BorderLayout.CENTER);
 		this.getContentPane().add(bar, BorderLayout.NORTH);
-		this.getContentPane().add(map, BorderLayout.EAST);*/
+		this.getContentPane().add(map, BorderLayout.EAST);
 			
 		this.setVisible(true);
 	}

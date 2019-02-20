@@ -131,10 +131,14 @@ public class GTen extends JPanel {
 
 	public Point getCellOn() {
 		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
+		
 		int margin = maxDim / 10;
+		float length = maxDim - 2 * margin;
+		int marginx = (int) ((this.getWidth() - length) / 2);
+		int marginy = (int) ((this.getHeight() - length) / 2);
 		maxDim -= 2 * margin;
-		int x = mouse.pos.x - margin;
-		int y = mouse.pos.y - margin;
+		int x = mouse.pos.x - marginx;
+		int y = mouse.pos.y - marginy;
 		if(x < 0 || y < 0)
 			return null;
 		return new Point(x * 3 / maxDim, y * 3 / maxDim);

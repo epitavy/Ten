@@ -12,7 +12,7 @@ public class GMenu extends JPanel {
 	
 	public GMenu() {
 		this.setLayout(new GridBagLayout());
-		main = new GButton(new Point(10, 10), 100, 100);
+		//main = new GButton(200, 100);
 		this.add(main);
 		
 	}
@@ -20,7 +20,6 @@ public class GMenu extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.orange);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		System.out.println("Je suis appelée!!");
 	}
 
 }
