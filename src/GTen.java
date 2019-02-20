@@ -16,6 +16,7 @@ public class GTen extends JPanel {
 	final float zoom = 0.15f;
 	
 	private Color colorBg;
+	private boolean end = false;
 
 	public GTen() {
 		basicG = new BasicGraphics();
@@ -46,10 +47,13 @@ public class GTen extends JPanel {
 
 		int margin = maxDim / 10;
 		
-		if(this.player == Player.CIRCLE)
-			colorBg = TenColors.circleBg;
-		else
-			colorBg = TenColors.crossBg;
+		if(!end) {
+			if(this.player == Player.CIRCLE)
+				colorBg = TenColors.circleBg;
+			else
+				colorBg = TenColors.crossBg;
+		}
+		
 		
 		//Draw uniform overriding background all over the panel
 		basicG.fillRect(new Point(), this.getWidth(), this.getHeight(), colorBg);
@@ -127,6 +131,60 @@ public class GTen extends JPanel {
 			//Flag TIE and previous set to true should never happen!
 			basicG.drawTie(pos, margin, TenColors.tie, colorBg);
 		}
+	}
+	
+	public void drawEnd(Flag winner) {
+		end = true;
+		Color winColor;
+		switch(winner) {
+		case CIRCLE:
+			winColor = TenColors.circleBg;
+			break;
+		case CROSS:
+			winColor = TenColors.crossBg;
+			break;
+		case TIE:
+			winColor = TenColors.tieWin;
+			break;
+		default:
+			winColor = Color.red;
+			break;
+		}
+		Color drawnColor;
+		long time = System.currentTimeMillis();
+		for(int i = 0; i < 20; i++) {
+			if(i % 2 == 0)
+				drawnColor = TenColors.circleBg;
+			else
+				drawnColor = TenColors.crossBg;
+			
+			colorBg = drawnColor;
+			repaint();
+			while(System.currentTimeMillis() - time < 300) {}
+			time = System.currentTimeMillis();
+			colorBg = winColor;
+			repaint();
+		}
+		
+	}
+	
+	public void setBackgroundEnd(Flag winner) {
+		end = true;
+		switch(winner) {
+		case CIRCLE:
+			colorBg = TenColors.circleBg;
+			break;
+		case CROSS:
+			colorBg = TenColors.crossBg;
+			break;
+		case TIE:
+			colorBg = TenColors.tieWin;
+			break;
+		default:
+			colorBg = Color.red;
+			break;
+		}
+		repaint();
 	}
 
 	public Point getCellOn() {

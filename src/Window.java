@@ -50,7 +50,6 @@ public class Window extends JFrame {
 	public void update(Tile board, Tile actual, Player p, Point[] last) {
 		game.update(actual, p);
 		map.update(board, p, last);
-		//bar.uppdate ??
 	}
 	
 	public boolean getInput(Point p) {
@@ -61,5 +60,11 @@ public class Window extends JFrame {
 			p.copy(temp);
 		}
 		return game.isClicked();
+	}
+	
+	public void ends(Flag winner) {
+		game.drawEnd(winner);
+		map.setBackgroundEnd(winner);
+		bar.drawEnd(winner);
 	}
 }
