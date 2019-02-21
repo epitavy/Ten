@@ -1,5 +1,6 @@
 public class Tile {
-	private Tile[][] board;
+	public Tile[][] board;
+//	private Tile[][] board;
 	private Flag type;
 	private int level;
 	private Point selected;

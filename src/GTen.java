@@ -12,9 +12,9 @@ public class GTen extends JPanel {
 	private Point[] previous;
 	private Mouse mouse;
 	private BasicGraphics basicG;
-	
+
 	final float zoom = 0.15f;
-	
+
 	private Color colorBg;
 	boolean end = false;
 
@@ -31,31 +31,30 @@ public class GTen extends JPanel {
 		this.player = p;
 		repaint();
 	}
-	
+
 	public void update(Tile board, Player p, Point[] previous) {
 		this.previous = previous;
 		update(board, p);
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		if (this.board == null)
 			return;
-		
+
 		this.basicG.g = g;
 		// Force drawing in a square
 		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
 
 		int margin = maxDim / 10;
-		
-		if(!end) {
-			if(this.player == Player.CIRCLE)
+
+		if (!end) {
+			if (this.player == Player.CIRCLE)
 				colorBg = TenColors.circleBg;
 			else
 				colorBg = TenColors.crossBg;
 		}
-		
-		
-		//Draw uniform overriding background all over the panel
+
+		// Draw uniform overriding background all over the panel
 		basicG.fillRect(new Point(), this.getWidth(), this.getHeight(), colorBg);
 
 		float length = maxDim - 2 * margin;
@@ -65,20 +64,20 @@ public class GTen extends JPanel {
 		drawBoard(g, this.board, point, length, false, false);
 	}
 
-
 	private void drawBoard(Graphics g, Tile cell, Point pos, float length, boolean select, boolean isPrevious) {
 		float cellspacing = length / 30;
-		
-		//Make the cell bigger if selected
-		if(select) {
+
+		// Make the cell bigger if selected
+		if (select) {
 			pos.x -= length * zoom / 2;
 			pos.y -= length * zoom / 2;
 			length *= (1 + zoom);
-		}	
-
+		}
+		if(cell == null)
+			return;
 		if (cell.getLevel() == 0)
 			basicG.drawRoundSquare(pos, length, length / 10, TenColors.black);
-
+		
 		Flag f = cell.getFlag();
 		if (f != Flag.BOARD && f != Flag.EMPTY) {
 			drawSymbol(cell.getFlag(), pos, length, isPrevious);
@@ -89,54 +88,53 @@ public class GTen extends JPanel {
 				for (int j = 0; j < 3; j++) {
 					float posx = pos.x + (i + 1) * cellspacing + i * sublength;
 					float posy = pos.y + (j + 1) * cellspacing + j * sublength;
-					
+
 					boolean selected = isSelected(cell, i, j);
 					boolean isPrev = isPreviousMove(cell, this.previous, isPrevious, i, j);
 
-					drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength,
-							selected, isPrev);
+					drawBoard(g, cell.getCell(new Point(i, j)), new Point((int) posx, (int) posy), sublength, selected, isPrev);
 				}
 			}
 		}
 	}
-	
+
 	private boolean isSelected(Tile cell, int i, int j) {
 		return cell.getSelected() != null && cell.getSelected().x == i && cell.getSelected().y == j;
 	}
-	
+
 	private boolean isPreviousMove(Tile cell, Point[] prev, boolean isPrevious, int i, int j) {
-		if(prev != null && prev[0] != null) {
-			if(cell.getLevel() == 2 && prev[0].x == i && prev[0].y == j)
+		if (prev != null && prev[0] != null) {
+			if (cell.getLevel() == 2 && prev[0].x == i && prev[0].y == j)
 				return true;
-			else if(isPrevious && cell.getLevel() == 1 && prev[1].x == i && prev[1].y == j)
+			else if (isPrevious && cell.getLevel() == 1 && prev[1].x == i && prev[1].y == j)
 				return true;
 		}
 		return false;
 	}
-	
+
 	private void drawSymbol(Flag f, Point pos, float length, boolean previous) {
 
 		float margin = length / 10;
 		if (f == Flag.CIRCLE) {
-			if(previous)
+			if (previous)
 				basicG.drawCircle(pos, margin, TenColors.circleLast, colorBg);
 			else
 				basicG.drawCircle(pos, margin, TenColors.circle, colorBg);
 		} else if (f == Flag.CROSS) {
-			if(previous)
+			if (previous)
 				basicG.drawCross(pos, margin, TenColors.crossLast, colorBg);
 			else
 				basicG.drawCross(pos, margin, TenColors.cross, colorBg);
 		} else if (f == Flag.TIE) {
-			//Flag TIE and previous set to true should never happen!
+			// Flag TIE and previous set to true should never happen!
 			basicG.drawTie(pos, margin, TenColors.tie, colorBg);
 		}
 	}
-	
+
 	public void drawEnd(Flag winner) {
 		end = true;
 		Color winColor;
-		switch(winner) {
+		switch (winner) {
 		case CIRCLE:
 			winColor = TenColors.circleBg;
 			break;
@@ -150,28 +148,29 @@ public class GTen extends JPanel {
 			winColor = Color.red;
 			break;
 		}
-		
+
 		Color drawnColor;
 		long time = System.currentTimeMillis();
-		for(int i = 0; i < 10; i++) {
-			if(i % 2 == 0)
+		for (int i = 0; i < 10; i++) {
+			if (i % 2 == 0)
 				drawnColor = TenColors.circleBg;
 			else
 				drawnColor = TenColors.crossBg;
-			
+
 			colorBg = drawnColor;
 			repaint();
-			while(System.currentTimeMillis() - time < 300) {}
+			while (System.currentTimeMillis() - time < 300) {
+			}
 			time = System.currentTimeMillis();
 			colorBg = winColor;
 			repaint();
 		}
-		
+
 	}
-	
+
 	public void setBackgroundEnd(Flag winner) {
 		end = true;
-		switch(winner) {
+		switch (winner) {
 		case CIRCLE:
 			colorBg = TenColors.circleBg;
 			break;
@@ -190,7 +189,7 @@ public class GTen extends JPanel {
 
 	public Point getCellOn() {
 		int maxDim = this.getWidth() > this.getHeight() ? this.getHeight() : this.getWidth();
-		
+
 		int margin = maxDim / 10;
 		float length = maxDim - 2 * margin;
 		int marginx = (int) ((this.getWidth() - length) / 2);
@@ -198,7 +197,7 @@ public class GTen extends JPanel {
 		maxDim -= 2 * margin;
 		int x = mouse.pos.x - marginx;
 		int y = mouse.pos.y - marginy;
-		if(x < 0 || y < 0)
+		if (x < 0 || y < 0)
 			return null;
 		return new Point(x * 3 / maxDim, y * 3 / maxDim);
 	}

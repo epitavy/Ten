@@ -35,20 +35,4 @@ public class Game {
 			nextFirstPlayer = Player.CIRCLE;
 		}
 	}
-	
-	void printWinner(Flag f) {
-		switch (f) {
-		case TIE:
-			System.out.println("It's a Tie");
-			break;
-		case CROSS:
-			System.out.println("The Crosses win this");
-			break;
-		case CIRCLE:
-			System.out.println("The Circles win this");
-			break;
-		default:
-			break;
-		}
-	}
 }
