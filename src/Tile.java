@@ -1,6 +1,5 @@
 public class Tile {
-	public Tile[][] board;
-//	private Tile[][] board;
+	private Tile[][] board;
 	private Flag type;
 	private int level;
 	private Point selected;
@@ -34,6 +33,17 @@ public class Tile {
 				this.board[i][j] = new Tile(this.level - 1);
 			}
 		}
+	}
+	
+	public Tile(Tile t) {
+		this.level = t.level;
+		if(t.selected == null)
+			this.selected = null;
+		else
+			this.selected = new Point(t.selected);
+		this.type = t.type;
+		this.board = t.board.clone();
+		this.num = t.num;
 	}
 
 	public int getNum() {

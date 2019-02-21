@@ -13,7 +13,7 @@ public class Game {
 		this.replay = false;
 	}
 
-	void execute() {
+	public void execute() {
 		do {
 			instancyEngine();
 			while (!e.isWin()) {

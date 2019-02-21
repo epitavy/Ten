@@ -12,7 +12,7 @@ public class Engine {
 		this.board = new Tile();
 		this.last = new Point[2];
 		for (int i = 0; i < 2; i++)
-			last[i] = null;
+			this.last[i] = null;
 		this.actual = this.board;
 		this.save = "";
 		if(p != null) {
@@ -27,6 +27,16 @@ public class Engine {
 			}
 		}
 		this.winner = Flag.BOARD;
+	}
+	
+	public Engine(Engine e) {
+		this.board = new Tile(e.board);
+		this.actual = new Tile(e.actual);
+		this.p = e.p;
+		this.last = new Point[2];
+		for (int i = 0; i < 2; i++)
+			this.last[i] = new Point(e.last[i]); 
+		this.winner = e.winner;
 	}
 
 	public int getState() {
