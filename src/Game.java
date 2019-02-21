@@ -3,32 +3,37 @@ public class Game {
 	Window w;
 	Point p;
 	boolean clic;
-	boolean stop;
-	Player firstPlayer;
+	boolean replay;
+	Player nextFirstPlayer;
 
 	public Game() {
-		this.e = new Engine(null);
-		this.firstPlayer = e.getPlayer();
-		w = new Window();
-		p = new Point();
-		stop = false;
+		this.nextFirstPlayer = null;
+		this.w = new Window();
+		this.p = new Point();
+		this.replay = false;
 	}
 
 	void execute() {
 		do {
+			instancyEngine();
 			while (!e.isWin()) {
 				clic = w.getInput(p);
 				e.run(p, clic);
 				w.update(e.getMap(), e.getActual(), e.getPlayer(), e.getLast());
-				//break;
 			}
-			w.ends(e.getWinner());
-			//stop = true;
+			replay = w.ends(e.getWinner());
 			
-			
-		} while (!stop);
-		//ici faut faire fermer la fenêtre
-		//w.dispatchEvent(new WindowEvent(w, WindowEvent.WINDOW_CLOSING));
+		} while (replay);
+		w.dispose();
+	}
+	
+	private void instancyEngine() {
+		this.e = new Engine(this.nextFirstPlayer);
+		if (e.getPlayer() == Player.CIRCLE) {
+			nextFirstPlayer = Player.CROSS;
+		} else {
+			nextFirstPlayer = Player.CIRCLE;
+		}
 	}
 	
 	void printWinner(Flag f) {

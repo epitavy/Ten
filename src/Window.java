@@ -22,13 +22,10 @@ public class Window extends JFrame {
 
 		//Panels for game
 		game = new GTen();
-		game.setBackground(Color.red);
 		map = new GTen();
 		map.setPreferredSize(new Dimension(width / 3, 0));
-		map.setBackground(Color.blue);
 		bar = new GTopBar();
 		bar.setPreferredSize(new Dimension(0, height / 9));
-		bar.setBackground(Color.green);
 		
 		//Panel for menu
 		/*menu = new GMenu();
@@ -61,9 +58,26 @@ public class Window extends JFrame {
 		return game.isClicked();
 	}
 	
-	public void ends(Flag winner) {
+	public void resetBar() {
+		bar = new GTopBar();
+		bar.setPreferredSize(new Dimension(0, height / 9));
+	}
+	
+	public boolean ends(Flag winner) {
 		game.drawEnd(winner);
 		map.setBackgroundEnd(winner);
 		bar.drawEnd(winner);
+		boolean b = bar.quitOrReplay();
+		this.getContentPane().removeAll();
+		bar = new GTopBar();
+		bar.setPreferredSize(new Dimension(0, height / 9));
+		this.getContentPane().add(game, BorderLayout.CENTER);
+		this.getContentPane().add(bar, BorderLayout.NORTH);
+		this.getContentPane().add(map, BorderLayout.EAST);
+		this.getContentPane().revalidate();
+		this.getContentPane().repaint();
+		map.end = false;
+		game.end = false;
+		return b;
 	}
 }

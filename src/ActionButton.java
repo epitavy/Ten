@@ -1,3 +1,3 @@
 public interface ActionButton {
-	void triggerAction();
+	void triggerAction(GTopBar gtbar);
 }

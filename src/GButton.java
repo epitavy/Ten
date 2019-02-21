@@ -1,8 +1,8 @@
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -14,25 +14,27 @@ public class GButton extends JComponent implements MouseListener, MouseMotionLis
 	
 	private int width, height, border;
 	
-	ButtonType type;
-	Color bgColor;
-	Color fgColor;
-	Color hlColor;
-	JLabel label;
+	private ButtonType type;
+	private Color bgColor;
+	private Color fgColor;
+	private String label;
+	private Font font;
+	private GTopBar gtbar;
 	
 	
 	private boolean mouseEntered;
 	private boolean mousePressed;
 	
-	public GButton(ActionButton onClick) {
-		this(100, 100, onClick);
+	public GButton(ActionButton onClick, GTopBar gtbar) {
+		this(100, 100, onClick, gtbar);
 	}
 	
-	public GButton(int width, int height, ActionButton onClick){
+	public GButton(int width, int height, ActionButton onClick, GTopBar gtbar){
 		this.onClick = onClick;
 		this.width = width;
 		this.height = height;
-		this.border = width > height ? height / 10 : width / 10;
+		this.border = width > height ? height / 20 : width / 20;
+		this.gtbar = gtbar;
 		
 		enableInputMethods(true);
 		addMouseListener(this);
@@ -42,26 +44,38 @@ public class GButton extends JComponent implements MouseListener, MouseMotionLis
 		type = ButtonType.RECTANGLE;
 		bgColor = new Color(150, 150, 150);
 		fgColor = Color.black;
-		hlColor = new Color(100, 255, 50);
-		label = new JLabel("Click me");
-		label.setForeground(fgColor);
-		this.add(label);
+		label = "Click me";
+		font = new Font("Serif", Font.BOLD, 18);
 		
 		basicG = new BasicGraphics();
 	}
 	
 	public void triggerIfClicked() {
 		if(mousePressed && mouseEntered) {
-			onClick.triggerAction();
+			onClick.triggerAction(gtbar);
 		}
 	}
 	
 	public void paintComponent(Graphics g) {
 		basicG.g = g;
 		if(mouseEntered)
-			basicG.drawBorderedRect(new Point(), width, height, border, bgColor, hlColor);
+			basicG.fillRoundRect(new Point(), width, height, border, bgColor);
 		else
 			basicG.fillRoundRect(new Point(border, border), (float)(width - 2 * border), (float)(height - 2 * border), (float)width / 10, bgColor);
+		basicG.drawCenteredString(label, this.getWidth() / 2, this.getHeight() / 2, fgColor, font);
+		
+	}
+	
+	public void setBackground(Color c) {
+		bgColor = c;
+	}
+	
+	public void setForegroundColor(Color c) {
+		fgColor = c;
+	}
+	
+	public void setText(String s) {
+		label = s;
 	}
 
 	@Override

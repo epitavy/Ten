@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class BasicGraphics {
 	Graphics g;
@@ -68,13 +70,17 @@ public class BasicGraphics {
 		g.fillRoundRect(p.x, p.y, (int)width, (int)height, (int)arc, (int)arc);
 	}
 	
-	public void drawCenteredString(String s, int x, int y, Color c, Font f) {
-		FontMetrics metrics = g.getFontMetrics(f);
+	public void drawCenteredString(String s, int x, int y, Color c) {
+		FontMetrics metrics = g.getFontMetrics(g.getFont());
 	    // Determine the X coordinate for the text
 	    x -= metrics.stringWidth(s) / 2;
-	    g.setFont(f);
 	    g.setColor(c);
 	    g.drawString(s, x, y);
+	}
+	
+	public void drawCenteredString(String s, int x, int y, Color c, Font f) {
+		g.setFont(f);
+		drawCenteredString(s, x, y, c);
 	}
 	
 	
