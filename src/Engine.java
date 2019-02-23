@@ -31,11 +31,15 @@ public class Engine {
 	
 	public Engine(Engine e) {
 		this.board = new Tile(e.board);
-		this.actual = new Tile(e.actual);
+		if(this.board.getSelected() == null)
+			this.actual = this.board;
+		else
+			this.actual = this.board.getCell(this.board.getSelected());
 		this.p = e.p;
 		this.last = new Point[2];
 		for (int i = 0; i < 2; i++)
-			this.last[i] = new Point(e.last[i]); 
+			if(this.last[i] != null)
+				this.last[i] = new Point(e.last[i]); 
 		this.winner = e.winner;
 	}
 

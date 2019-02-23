@@ -10,4 +10,11 @@ public enum Player {
 	public Flag toFlag() {
 		return this.f;
 	}
+	
+	public Player opponent() {
+		if(f == Flag.CROSS)
+			return Player.CIRCLE;
+		else 
+			return Player.CROSS;
+	}
 }

@@ -18,7 +18,7 @@ public class Point {
 	}
 	
 	public void print() {
-		System.out.println(x + " " + y);
+		System.out.print(x + " " + y);
 	}
 	
 	public static boolean isValid(Point p) {

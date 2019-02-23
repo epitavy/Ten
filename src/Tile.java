@@ -5,7 +5,7 @@ public class Tile {
 	private Point selected;
 	private int num;
 
-	private Tile(int level) {
+	Tile(int level) {
 		this.level = level;
 		this.selected = null;
 		if (level == 0) {
@@ -35,6 +35,13 @@ public class Tile {
 		}
 	}
 	
+	public Tile(Tile[][] board, int level) {
+		this.level = level;
+		this.board = board;
+		this.type = calculateType();
+		this.selected = null;
+	}
+	
 	public Tile(Tile t) {
 		this.level = t.level;
 		if(t.selected == null)
@@ -42,7 +49,17 @@ public class Tile {
 		else
 			this.selected = new Point(t.selected);
 		this.type = t.type;
-		this.board = t.board.clone();
+		if(t.type != Flag.BOARD)
+			this.board = null;
+		else {
+			this.board = new Tile[3][3];
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					this.board[i][j] = new Tile(t.board[i][j]);
+				}
+			}
+		}
+		
 		this.num = t.num;
 	}
 
@@ -125,6 +142,24 @@ public class Tile {
 		return winingDiag0(player) || winingDiag1(player);
 	}
 
+	private Flag calculateType() {
+		Flag f = Flag.BOARD;
+		Point pos = new Point();
+		for(int i = 0; i < 3; i++) {
+			pos.change(i, i);
+			f = winOrTie(Player.CIRCLE, pos);
+			if(f != Flag.BOARD)
+				return f;
+		}
+		for(int i = 0; i < 3; i++) {
+			pos.change(i, i);
+			f = winOrTie(Player.CROSS, pos);
+			if(f != Flag.BOARD)
+				return f;
+		}
+		
+		return f;
+	}
 	private boolean winingRow(Player player, int row) {
 		Flag p = player.toFlag();
 		return board[row][0].type == p && board[row][1].type == p && board[row][2].type == p;
