@@ -39,7 +39,6 @@ public class Game {
 			}
 			
 			w.update(e.getMap(), e.getActual(), e.getPlayer(), e.getLast());
-			
 		}
 		return w.ends(e.getWinner());
 	}
@@ -50,7 +49,6 @@ public class Game {
 			clic = w.getInput(p);
 			e.run(p, clic);
 			w.update(e.getMap(), e.getActual(), e.getPlayer(), e.getLast());
-			
 		}
 		return w.ends(e.getWinner());
 	}
