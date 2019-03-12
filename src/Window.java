@@ -9,7 +9,6 @@ public class Window extends JFrame {
 	private GTen game;
 	private GTopBar bar;
 	private GTen map;
-	private GMenu menu;
 	final int width = 1200;
 	final int height = 900;
 	

@@ -26,6 +26,26 @@ public class Game {
 		w.dispose();
 	}
 	
+	/**
+	 * Use only for genetics algorithme
+	 * return the flag of winning ia
+	 */
+	public Flag iaVSia(IA ia1, IA ia2) {
+		instancyEngine();
+		ia1.realGame = e;
+		ia2.realGame = e;
+		if(ia1.player == ia2.player)
+			return Flag.TIE;
+		e.setPlayer(ia1.player);
+		while (!e.isWin()) {
+			if(e.getPlayer() == ia1.player)
+				ia1.play();
+			else
+				ia2.play();
+		}
+		return e.getWinner();
+	}
+	
 	public boolean playerVSIA() {
 		instancyEngine();
 		IA ia = new IA(e, Player.CIRCLE);

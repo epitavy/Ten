@@ -1,10 +1,13 @@
+import java.util.Arrays;
+import java.util.Random;
 
 public class IA {
 	
 
 	Engine realGame;
 	Player player;	
-	private int maxDepth = 5;
+	int maxDepth = 3;
+	int strongness = 0;
 	private final long minWaitingTime = 2000;
 	//The third point is the complementary point supposed to be free
 	private static final Point[][] alignedWinningCell = {
@@ -34,21 +37,41 @@ public class IA {
 			{new Point(0, 0), new Point(2, 2), new Point(1, 1)},
 			{new Point(0, 2), new Point(2, 0), new Point(1, 1)},
 	};
-	private static final int posCoeff[][] = 
+	int posCoeff[][] = 
 		{
 			{3, 1, 3},
 			{1, 5, 1},
 			{3, 1, 3}
 		};
-	private static final int doubleValue = 7;
-	private static final int takenCoeff = 20;
+	int lookUpCoeff[] = {0, 1, 2, 3, 4};
+	int doubleValue = 7;
+	int takenCoeff = 20;
 		
 	public IA(Engine engine, Player p) {
 		this.realGame = engine;
 		this.player = p;
 	}
 	
+	public IA(Player p) {
+		this.player = p;
+	}
+	
 	public void play() {
+		boolean isFirstMove = false;
+		if(realGame.getState() == 2) {
+			isFirstMove = true;
+			for(int i = 0; isFirstMove && i < 3; i++)
+				for(int j = 0; isFirstMove && j < 3; j++)
+					if(realGame.getActual().getCell(new Point(i, j)).getNum() != 0)
+						isFirstMove = false;
+		}
+		
+		if(isFirstMove) {
+			realGame.run(new Point(1, 1), true);
+			realGame.run(new Point(1, 1), true);
+			return;
+		}
+				
 		long time = System.currentTimeMillis();
 		Point[] bestMove = new Point[2];
 		findBestMove(realGame, bestMove);
@@ -71,12 +94,14 @@ public class IA {
 	private int findBestMove(Engine e, Point[] bestMove) {
 		Point[] possibleMoves = getAllPossibleMoves(e.getActual());
 		int n = possibleMoves.length;
-		int bestMoveValue = Integer.MIN_VALUE;
+		int bestMoveValue = 0;
+		int[] weights = new int[n];
+		
 		if(e.getState() == 2) {
+			Point[] currMove = new Point[2];
 			for(int i = 0; i < n; i++) {
 				Engine temp = new Engine(e);
 				temp.run(possibleMoves[i], true);
-				Point[] currMove = new Point[2];
 				//Best move is stored in currMove[0] at this point
 				int currMoveValue = findBestMove(temp, currMove);
 				if(currMoveValue > bestMoveValue) {
@@ -85,17 +110,20 @@ public class IA {
 					bestMove[1] = currMove[0];
 				}
 			}
+			bestMove[0] = currMove[0];
+			int index = pickRandomWeighted(weights);
+			bestMove[1] = possibleMoves[index];
 		}
 		else {
+			bestMoveValue = Integer.MIN_VALUE;
 			for(int i = 0; i < n; i++) {
 				Engine temp = new Engine(e);
 				temp.run(possibleMoves[i], true);
-				int currMoveValue = minimaxWorst(temp, maxDepth);
-				if(currMoveValue > bestMoveValue) {
-					bestMoveValue = currMoveValue;
-					bestMove[0] = possibleMoves[i];
-				}
+				weights[i] = minimaxWorst(temp, maxDepth);
 			}
+			int index = pickRandomWeighted(weights);
+			bestMoveValue = weights[index];
+			bestMove[0] = possibleMoves[index];
 		}
 		return bestMoveValue;
 	}
@@ -173,7 +201,7 @@ public class IA {
 				for(int j = 0; j < 3; j++) {
 					pos.change(i,  j);
 					int cellCoeff = computeCoeff(t, pos, p);
-					value += evaluateTakenPos(t.getCell(pos), p) * cellCoeff;
+					value += evaluateTakenPos(t.getCell(pos), p) * lookUpCoeff[cellCoeff];
 				}
 			}
 			return value;
@@ -261,5 +289,27 @@ public class IA {
 	
 	private int getNumberOfPossibleMove(Tile board) {
 		return 9 - board.getNum();
+	}
+	
+	private int pickRandomWeighted(int[] weights) {
+		int n = weights.length;
+		int minValue = Integer.MAX_VALUE;
+		int maxValue = Integer.MIN_VALUE;
+		for(int i = 0; i < n; i++) {
+			minValue = minValue > weights[i] ? weights[i] : minValue;
+			maxValue = maxValue < weights[i] ? weights[i] : maxValue;
+		}
+		if(maxValue == minValue)
+			return (new Random()).nextInt(n);
+		maxValue -= minValue;
+		for(int i = 1; i < n; i++) weights[i] = (weights[i] - minValue) * 100 / maxValue;
+		int r = (new Random()).nextInt(100);
+		
+		//Search the corresponding index
+		for(int i = 0; i < n; i++)
+			if(r < weights[i])
+				return i;
+
+		return n - 1;
 	}
 }

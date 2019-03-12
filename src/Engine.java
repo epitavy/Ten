@@ -54,6 +54,10 @@ public class Engine {
 	public Player getPlayer() {
 		return p;
 	}
+	
+	public void setPlayer(Player p) {
+		this.p = p;
+	}
 
 	public String getSave() {
 		return save;
